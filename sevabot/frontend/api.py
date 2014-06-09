@@ -214,6 +214,20 @@ class TeamcityWebHook(SendMessage):
 
         return message
 
+class CasinoTeamcityWebHook(SendMessage):
+
+    def compose(self):
+        payload = json.loads(request.data)
+        build = payload.get('build')
+
+	if build.get('buildResult') == 'success':
+		status = '(sun)'
+	else:
+		status = '(devil)'
+
+        message = '%s | %s | %s | %s' % (status, build.get('buildNumber'), build.get('buildFullName'), build.get('triggeredBy'))
+
+        return message
 
 def configure(sevabot, settings, server):
     """
@@ -244,4 +258,6 @@ def configure(sevabot, settings, server):
     server.add_url_rule('/jenkins-notifier/<string:chat_id>/<string:shared_secret>/', view_func=JenkinsNotifier.as_view(str('send_message_jenkins'), sevabot=sevabot, shared_secret=settings.SHARED_SECRET))
 
     server.add_url_rule('/teamcity/<string:chat_id>/<string:shared_secret>/', view_func=TeamcityWebHook.as_view(str('send_message_teamcity'), sevabot=sevabot, shared_secret=settings.SHARED_SECRET))
+
+    server.add_url_rule('/casino/teamcity/<string:chat_id>/<string:shared_secret>/', view_func=CasinoTeamcityWebHook.as_view(str('send_message_casino_teamcity'), sevabot=sevabot, shared_secret=settings.SHARED_SECRET))
 
