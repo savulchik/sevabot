@@ -225,7 +225,7 @@ class CasinoTeamcityWebHook(SendMessage):
 	else:
 		status = '(devil)'
 
-        message = '%s | %s | %s | %s' % (status, build.get('buildNumber'), build.get('buildFullName'), build.get('triggeredBy'))
+        message = '%s | %s | %s | %s | %s' % (status, build.get('buildNumber'), build.get('buildFullName'), build.get('branchDisplayName'), build.get('triggeredBy'))
 
         return message
 
